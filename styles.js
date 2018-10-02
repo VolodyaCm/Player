@@ -4,8 +4,9 @@ const hoverPlay = {
   height: '90px',
   borderRadius: '50%',
   transition: '0.2s',
-  fontSize: '90px',
-  lineHeight: '90px'
+  fontSize: '40px',
+  lineHeight: '90px',
+  width: '90px',
 };
 
 const hoverEl1 = {
@@ -22,7 +23,7 @@ const hoverList = {
 };
 
 const hoverEl2 = {
-  width: '200%',
+  width: '300%',
 };
 
 const hoverEffects = {

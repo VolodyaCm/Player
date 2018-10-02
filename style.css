@@ -1,10 +1,11 @@
 * {
   margin: 0;
   padding: 0;
+  font-family: sans-serif;
 }
 
 body {
-  background: #222;
+  background: #1e1e1e;
 }
 
 .box {
@@ -13,7 +14,7 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  
+  transition: 1s;
 }
 
 .in_box {
@@ -25,7 +26,9 @@ body {
   border-radius: 10.99999999%;
   padding: 50px;
   border: 2px solid #473434;
-  
+  background: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 0 10px 1px black;
+  z-index: 3;
 }
 
 .el {
@@ -73,6 +76,9 @@ body {
   position: absolute;
   border-radius: 10%;
   z-index: -1;
+  width: 500px;
+  height: 500px;
+  z-index: 2;
 }
 
 #analayser:hover{
@@ -96,18 +102,124 @@ body {
 } */
 
 .menu {
-  width: 598px;
-  height: 598px;
+  width: 400px;
+  height: 400px;
   position: absolute;
-  border-radius: 50px;
-  display: none;
+  background: #ebebeb;
+  border-bottom-right-radius: 40px;
+  border-top-right-radius: 40px;
+  display:none;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+  align-content: space-around;
+  transition: 1s;
+  z-index: 1;
+  box-shadow: 0 0 10px 1px black;
 }
 
-.wind {
-  width: 100%;
-  height: 200px;
+.top_line {
+  width: 90%;
+  background: #fff;
+  height: 40px;
+}
+
+.menuBody {
+  width: 90%;
+  height: 340px;
+  background: rgb(255, 255, 255);
+}
+
+.close {
+  width: 40px;
+  height: 40px;
+  background: #333;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  line-height: 40px;
+  position: absolute;
+  left: calc(50% + 150px);
+  top: calc(50% - 190px);
+  transition: 0.2s;
+}
+
+.close:hover {
+  background: rgb(212, 50, 50);
+  cursor: pointer;
+  z-index: 9999999;
+  transition: 0.2s;
+}
+
+
+/* Стилі */
+.hoverPlay {
+  background: #473434;
+  cursor: pointer;
+  height: 90px;
+  border-radius: 50%;
+  transition: 0.2s;
+  font-size: 90px;
+  line-height: 90px;
+}
+
+.hoverEl1 {
+  height: 90px;
+  border-radius: 50%;
+}
+
+.control {
+  width: 500px;
+  height: 100px;
+  position: absolute;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: calc(50% - 240px);
+  flex-direction: column;
+}
+
+.range {
+  -webkit-appearance: none;
+  width: 400px;
+  height: 2px;
+  border-radius: 10px;
+  outline: none;
+  background: -webkit-linear-gradient(left, #222 0%, #222 0%, #fff 0%, #fff 100%);
+  box-shadow: 0 0 10px 0.5px silver;
+}
+
+.range:hover {
+  cursor: pointer;
+}
+
+.range::-webkit-slider-thumb {
+  -webkit-appearance: none;
   background: #222;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
+.range::-webkit-slider-thumb:hover, .range::-webkit-slider-thumb:active {
+  width: 18px;
+  height: 18px;
+  transition: 0.2s;
+  box-shadow: 0 0 10px 1px black;
+  background: #fff;
+}
+
+.name {
+  margin-top: 20px;
+  box-shadow: 0 0 10px 1px silver;
+  border-radius: 10px;
+  width: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
