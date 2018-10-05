@@ -7,6 +7,8 @@ const menu = document.querySelector('.menu');
 const close = document.querySelector('.close');
 const inputName = document.querySelector('.name');
 
+const menuList = document.querySelector('.menuBody');
+
 
 const playButton = document.querySelector('#play');
 const timeline = document.querySelector('.range');
@@ -23,14 +25,36 @@ close.addEventListener('click', function() {
   // menu.style.display = 'none';
 });
 
-//Отримання елементів управління
-function getInterfaceElements() {
+function loadListMusic() {
+  let n = 0;
+  for(let s of buffer.urls) {
+    let soundId = 'sound' + n;
+    let str = document.createElement('div');
+    let controlPanel = document.createElement('div');
+    console.log(str);
+    menuList.appendChild(str);
+    str.id = soundId;
+    str.classList.value = 'soundStr';
+    // setStyles(strSoundStyle, str);
+    str.innerHTML = `<p class="soundStrName">${s.slice(6)}</p>`;
+    str.appendChild(controlPanel);
+    controlPanel.id = n;
+    controlPanel.classList.value = 'rightControlMenu';
+    controlPanel.innerHTML = `<img src="img/${'play.png'}">`;
+    n += 1;
+    
+  }
+};
+
+//Отримання елементів
+function getInterfaceElements(arrNodeElements) {
   const parents = [];
   const children = [];
-  const elements = document.querySelectorAll('.el');
+  const elements = arrNodeElements;
   for(let element of elements) {
     console.log(element.classList);
-    parents.push({id: element.classList[1], node: element});
+    let id = element.classList[1] || element.id;
+    parents.push({id: id, node: element});
     for(let el of element.children) {
       children.push({id: el.id, node: el});
     }
@@ -39,8 +63,8 @@ function getInterfaceElements() {
 };
 
 //Деструктуризація масиву який повертає функція gtInterfaceElements()
-const [parentInterfaseElements, childrenInterfaseElements] = getInterfaceElements();
-
+const [parentInterfaseElements, childrenInterfaseElements] = getInterfaceElements(document.querySelectorAll('.el'));
+// const [soundStrElements, childrenSoundStrElements] = getInterfaceElements(document.querySelectorAll('.soundStr'));
 //Масив функцій для кожного елементу управління які виконуються при події event
 const functions = [
   [
@@ -48,23 +72,29 @@ const functions = [
       const element = childrenInterfaseElements[0].node;
       setStyles(hoverPlay, childrenInterfaseElements[0].node);
       setStyles(hoverEl1, parentInterfaseElements[0].node);
-      element.textContent = '\u25B6';
+      element.childNodes[0].textContent = '';
+      element.children[0].style.display = 'block';
     },
     () => {
       const element = childrenInterfaseElements[0].node;
       deleteStyles(hoverPlay, childrenInterfaseElements[0].node);
       deleteStyles(hoverEl1, parentInterfaseElements[0].node);
-      element.textContent = 'P';
+      element.children[0].style.display = 'none';
+      element.childNodes[0].textContent = 'P';
     },
   ],
   [
     () => {
+      const element = childrenInterfaseElements[1].node;
       setStyles(hoverList, childrenInterfaseElements[1].node);
       setStyles(hoverEl2, parentInterfaseElements[1].node);
+      element.textContent = '';
     },
     () => {
+      const element = childrenInterfaseElements[1].node;
       deleteStyles(hoverList, childrenInterfaseElements[1].node);
       deleteStyles(hoverEl2, parentInterfaseElements[1].node);
+      element.textContent = 'L';
     },
   ],
   [
@@ -116,6 +146,9 @@ function behaviorToElement() {
 };
 
 behaviorToElement();
+
+
+
 
 //Функція встановлення стилів
 function setStyles(styles, obj2) {
@@ -187,8 +220,12 @@ class Buffer {
   };
 
   loadAll() {
-    this.urls.forEach((url, index) => {
-      this.loadSound(url, index);
+    let th = this;
+    return new Promise(function(resolve, reject) {
+      th.urls.forEach((url, index) => {
+      th.loadSound(url, index);
+      });
+      setTimeout(resolve, 10000);
     });
   }
 
@@ -250,7 +287,7 @@ class Sound {
       draw();
     }else {
       this.init();
-      this.source.start(0);
+      this.source.start(0, sound.currentTime);
       this.createAnalyser();
       draw();
     };
@@ -262,6 +299,28 @@ class Sound {
       }, 2000);
       console.log('end');
     };
+  }
+
+  playSoundForIndex(id) {
+    sound.currentTime = 0;
+    if(buffer.buffer[+id]) {
+      sound.stop();
+      this.buffer = buffer.buffer[+id];
+      sound.soundIndex = +id;
+      sound.soundName();
+      this.init();
+      this.source.start(0);
+      this.createAnalyser();
+      draw();
+      sound.source.onended = function() {
+        setTimeout(function() {
+          if(sound.timerId == 'end') {
+              sound.nextSound();
+          }
+        }, 2000);
+        console.log('end');
+      };
+    }
   }
 
   stop() {
@@ -330,13 +389,18 @@ class Sound {
 };
 
 let context = new (window.AudioContext || window.webkitAudioContext)();
-let urlsAudio = ['music/Zedd_featJon_Bellion_BeautifulNow.mp3','music/Starset – My Demons.mp3', 'music/Blackbear – Idfc.mp3', 'music/Extreme_Music-Bring_Me_Back_To_Life.mp3', 'music/Alan Walker – Faded.mp3', 'music/08 - Linkin Park - Hybrid Theory - In The End.mp3', 'music/Ramin Djawadi – Light Of The Seven.mp3'];
+let urlsAudio = ['music/Zedd_featJon_Bellion_BeautifulNow.mp3','music/Starset – My Demons.mp3', 'music/Blackbear – Idfc.mp3', 'music/Extreme_Music-Bring_Me_Back_To_Life.mp3', 'music/Alan Walker – Faded.mp3', 'music/08 - Linkin Park - Hybrid Theory - In The End.mp3', 'music/bring-me-the-horizon-throne_.mp3'];
 
-window.onload = function() {
+
   window.buffer = new Buffer(context, urlsAudio);
-  buffer.loadAll();
+  buffer.loadAll().then(function() {
+    loadListMusic();
+    const [soundStrElements, childrenSoundStrElements] = getInterfaceElements(document.querySelectorAll('.soundStr'));
+    addEventOnArrElements(childrenSoundStrElements, 'click', whatSoundPlay);
+  });
   window.sound = new Sound(context);
-};
+  
+
 
 let idAnimation2;
 function setSoundOnTimeline() {
@@ -349,18 +413,14 @@ function setSoundOnTimeline() {
 };
 
 
-
-
-
-
-
-
-playButton.onclick = function() {
+function playSound() {
   if(sound.context.state === 'running') {
     cancelAnimationFrame(idAnimation2);
     sound.context.suspend();
     cancelAnimationFrame(idAnimation);
+    playButton.children[0].src = 'img/play.svg';
   } else if(sound.context.state === 'suspended') {
+    playButton.children[0].src = 'img/pause.svg';
     sound.soundName();
     sound.context.resume();
     setSoundOnTimeline();
@@ -369,12 +429,31 @@ playButton.onclick = function() {
       sound.musicTimer();
     }, 1000);
   }
+}
+
+function whatSoundPlay(element) {
+  if(+element.id == sound.soundIndex) {
+    playSound();
+  }else {
+    sound.playSoundForIndex(element.id);
+  }
+}
+
+playButton.onclick = playSound;
+
+function addEventOnArrElements(arr, event, fn) {
+  arr.forEach(el => {
+    console.log(el);
+    if(el.node.tagName == 'DIV') el.node.addEventListener(event,() => fn(el));
+  });
 };
 
 
 
 
 
+
+// addEventOnArrElements(childrenSoundStrElements, 'onclick', playSound);
 
 
 

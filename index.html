@@ -11,7 +11,7 @@
     <div class="box">
         <div class="menu">
             <div class="close">✖</div>
-            <div class="top_line"></div>
+            <div class="top_line"><input type="text" id="search" placeholder="search"></div>
             <div class="menuBody">
 
             </div>
@@ -20,10 +20,20 @@
         <div class="in_box">
           <div class="control">
                 <input type="range" class="range" value="0" min="0" max="100">
-                <div class="name">loading...</div>
+                <div class="name">
+                  <p>Loading...</p>
+                </div>
            </div>
-          <div class="el el1"><p id="play">P</p></div>
-          <div class="el el2"><p id="list">L</p></div>
+          <div class="el el1">
+            <p id="play">
+                P
+                <img src="img/play.svg" alt="" width="30" height="30">
+              </svg>
+            </p>
+          </div>
+          <div class="el el2">
+              <p id="list">L</p>
+          </div>
           <div class="el el3">
             <p id="analayser">A</p>
             <p id="you">Y</p>
