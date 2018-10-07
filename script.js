@@ -17,6 +17,80 @@ const volume = document.querySelector('.volume');
 const playButton = document.querySelector('#play');
 const timeline = document.querySelector('.range');
 
+
+const blocks = document.querySelectorAll('.blocks');
+const load = document.querySelector('.load');
+
+function moveRightToLeft() {
+  let n = 40;
+  let t = 500;
+  let tId;
+  for(let el of blocks) {
+      tId = setTimeout(function () {
+      el.style.transition = '0.7s';
+      el.style.right = `- ${n}px`;
+      el.style.opacity = 1;
+    },t);
+    n += 20;
+    t += 250;
+  }
+};
+
+function moveDUD() {
+  let n = 380;
+  let t = 200;
+  for(let el of blocks) {
+    tId = setTimeout(function() {
+      el.style.transition = '0.5s';
+      el.style.top = `-45px`;
+      setTimeout(function() {
+        el.style.transition = '0.2s';
+        el.style.top = `35px`;
+        el.style.opacity = 0;
+      }, 300); 
+    }, t)
+    // n += 90;
+    t += 250;
+  }
+}
+
+function startAnimation() {
+  moveRightToLeft();
+  setTimeout(function() {
+    moveDUD();
+  }, 1500);
+  setTimeout(function() {
+    for(let el of blocks) {
+      el.style.top = 0;
+      el.style.opacity = 0;
+      // el.style.right = 0;
+    }
+  }, 3100); 
+}
+
+function startGlobalAnimation() {
+  let i = 0;
+  let tId = setTimeout(function tick() {
+    console.log(tId);
+    startAnimation();
+    if(i >= 5) {
+      i = 0;
+      load.style.opacity = 0;
+      clearTimeout(tId);
+      setTimeout(function() {
+        load.style.display = 'none';
+      }, 500);
+      return;
+    };
+    i += 1;
+    tId = setTimeout(tick, 3000);
+  }, 100);
+};
+
+window.onload = function() {
+  startGlobalAnimation();
+};
+
 openSoundList.addEventListener('click', function() {
   box.style.marginLeft = '-400px';
   menu.style.display = 'flex';
