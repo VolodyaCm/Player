@@ -39,11 +39,10 @@ function loadListMusic() {
     str.id = soundId;
     str.classList.value = 'soundStr';
     // setStyles(strSoundStyle, str);
-    str.innerHTML = `<p class="soundStrName">${s.slice(6)}</p>`;
+    str.innerHTML = `<p class="soundStrName" id = '${n}'>${s.slice(6)}</p>`;
     str.appendChild(controlPanel);
     controlPanel.id = n;
     controlPanel.classList.value = 'rightControlMenu';
-    controlPanel.innerHTML = `<img src="img/${'play.png'}">`;
     n += 1;
     
   }
@@ -56,7 +55,7 @@ function getInterfaceElements(arrNodeElements) {
   const elements = arrNodeElements;
   for(let element of elements) {
     let id = element.classList[1] || element.id;
-    parents.push({id: id, node: element});
+    parents.push({id: id, node: element, state: ''});
     for(let el of element.children) {
       children.push({id: el.id, node: el});
     }
@@ -232,7 +231,7 @@ class Buffer {
       th.urls.forEach((url, index) => {
       th.loadSound(url, index);
       });
-      setTimeout(resolve, 10000);
+      setTimeout(resolve, 1000);
     });
   }
 
@@ -279,9 +278,34 @@ class Sound {
     this.source.connect(this.analyser);
     this.analyser.connect(this.context.destination);
   }
+
+
+
+  checkMusicInTheList() {
+    soundStrElements.forEach(el => {
+      if(el.node.tagName == 'DIV') {
+        el.state = '';
+        el.node.style.border = 'none';
+        el.node.style.background = '#ebebeb';
+      };
+
+      childrenSoundStrElements.forEach(el2 => {
+        if(el2.node.textContent == sound.name.slice(6)) {
+          el2.node.parentNode.style.background = 'silver';
+        };
+        console.log()
+        if(el.id.slice(5) == sound.soundIndex) {
+          el.state = 'plaing';
+        }
+      });
+
+    });
+  }
   
   play(tm) {
+    
     sound.soundName();
+    sound.checkMusicInTheList();
     if(tm || tm == 0) {
       cancelAnimationFrame(idAnimation);
       // sound.context.suspend();
@@ -311,6 +335,7 @@ class Sound {
   playSoundForIndex(id) {
     sound.currentTime = 0;
     if(buffer.buffer[+id]) {
+      cancelAnimationFrame(idAnimation);
       sound.stop();
       this.buffer = buffer.buffer[+id];
       sound.soundIndex = +id;
@@ -327,7 +352,8 @@ class Sound {
         }, 2000);
         console.log('end');
       };
-    }
+    };
+    sound.checkMusicInTheList();
   }
 
   stop() {
@@ -421,15 +447,33 @@ let context = new (window.AudioContext || window.webkitAudioContext)();
 let urlsAudio = ['music/Zedd_featJon_Bellion_BeautifulNow.mp3','music/Starset – My Demons.mp3', 'music/BMTH – can you feel my heart.mp3', 'music/Extreme_Music-Bring_Me_Back_To_Life.mp3', 'music/Alan Walker – Faded.mp3', 'music/08 - Linkin Park - Hybrid Theory - In The End.mp3', 'music/bring-me-the-horizon-throne_.mp3'];
 
 
+
   window.buffer = new Buffer(context, urlsAudio);
   buffer.loadAll().then(function() {
     loadListMusic();
     const [soundStrElements, childrenSoundStrElements] = getInterfaceElements(document.querySelectorAll('.soundStr'));
-    addEventOnArrElements(childrenSoundStrElements, 'click', whatSoundPlay);
+    window.soundStrElements = soundStrElements;
+    window.childrenSoundStrElements = childrenSoundStrElements;
+    addEventOnArrElements(soundStrElements, 'click', whatSoundPlay);
+    addEventOnArrElements(soundStrElements, 'mouseover', soundStrOver);
+    addEventOnArrElements(soundStrElements, 'mouseout', soundStrOut);
   });
   window.sound = new Sound(context);
   
 
+function soundStrOver(el) {
+  el.node.style.cursor = 'pointer';
+  if(!el.state) {
+    console.log(el);
+    el.node.style.background = '#d3d3d3';
+  }
+};
+
+function soundStrOut(el) {
+  if(!el.state) {
+    el.node.style.background = '#ebebeb';
+  }
+}
 
 let idAnimation2;
 function setSoundOnTimeline() {
@@ -461,10 +505,14 @@ function playSound() {
 }
 
 function whatSoundPlay(element) {
-  if(+element.id == sound.soundIndex) {
+  soundStrElements.forEach(el => {
+    el.state = '';
+  });
+  element.state = 'plaing';
+  if(element.id.slice(5) == sound.soundIndex) {
     playSound();
   }else {
-    sound.playSoundForIndex(element.id);
+    sound.playSoundForIndex(element.id.slice(5));
   }
 }
 
@@ -472,7 +520,7 @@ playButton.onclick = playSound;
 
 function addEventOnArrElements(arr, event, fn) {
   arr.forEach(el => {
-    if(el.node.tagName == 'DIV') el.node.addEventListener(event,() => fn(el));
+    el.node.addEventListener(event,() => fn(el));
   });
 };
 

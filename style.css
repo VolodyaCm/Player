@@ -276,26 +276,6 @@ body {
   
 }
 
-.soundStr:hover {
-  background: #d3d3d3;
-  cursor: pointer;
-}
-
-.soundStr:hover > .soundStrName {
-  margin-left: -120px;
-  transition: 0.5s;
-}
-
-.soundStr:hover > .rightControlMenu {
-  width: 40px;
-  transition: 0.5s;
-  /* margin-right: -2px; */
-}
-.soundStr:hover > .rightControlMenu img{
-  opacity: 1;
-  transition: 1s;
-}
-
 .soundStrName {
   transition: 0.2s;
 }
@@ -307,7 +287,7 @@ body {
   align-self: center;
   overflow: hidden;
   border-radius: 20px;
-  box-shadow: 0 0 10px 1px silver;
+  box-shadow: 0 0 35px 2px black;
   display: flex;
   justify-content: center;
   align-items: center;
