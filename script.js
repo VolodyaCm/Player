@@ -7,13 +7,17 @@ const menu = document.querySelector('.menu');
 const close = document.querySelector('.close');
 const inputName = document.querySelector('.name');
 
-const menuList = document.querySelector('.menuBody');
 
+const menuList = document.querySelector('.menuBody');
+const openSoundList = document.querySelector('.openSoundList');
+const buttonPrevious = document.querySelector('.previous');
+const buttonNext = document.querySelector('.next');
+const volume = document.querySelector('.volume');
 
 const playButton = document.querySelector('#play');
 const timeline = document.querySelector('.range');
 
-list.addEventListener('click', function() {
+openSoundList.addEventListener('click', function() {
   box.style.marginLeft = '-400px';
   menu.style.display = 'flex';
   menu.style.left = 'calc(50% - 150px)';
@@ -31,7 +35,6 @@ function loadListMusic() {
     let soundId = 'sound' + n;
     let str = document.createElement('div');
     let controlPanel = document.createElement('div');
-    console.log(str);
     menuList.appendChild(str);
     str.id = soundId;
     str.classList.value = 'soundStr';
@@ -52,7 +55,6 @@ function getInterfaceElements(arrNodeElements) {
   const children = [];
   const elements = arrNodeElements;
   for(let element of elements) {
-    console.log(element.classList);
     let id = element.classList[1] || element.id;
     parents.push({id: id, node: element});
     for(let el of element.children) {
@@ -88,13 +90,19 @@ const functions = [
       const element = childrenInterfaseElements[1].node;
       setStyles(hoverList, childrenInterfaseElements[1].node);
       setStyles(hoverEl2, parentInterfaseElements[1].node);
-      element.textContent = '';
+      element.childNodes[0].textContent = '';
+      openSoundList.style.display = 'flex';
+      buttonNext.style.display = 'flex';
+      buttonPrevious.style.display = 'flex';
     },
     () => {
       const element = childrenInterfaseElements[1].node;
       deleteStyles(hoverList, childrenInterfaseElements[1].node);
       deleteStyles(hoverEl2, parentInterfaseElements[1].node);
-      element.textContent = 'L';
+      element.childNodes[0].textContent = 'L'
+      openSoundList.style.display = 'none';
+      buttonNext.style.display = 'none';
+      buttonPrevious.style.display = 'none';
     },
   ],
   [
@@ -132,7 +140,6 @@ const functions = [
 
 //Функція яка привязує обробник функцію з масиву functions 
 function setBehavior(el, functions) {
-  console.log(functions);
     el.addEventListener('mouseover', functions[0]);
     el.addEventListener('mouseout', functions[1]);
 };
@@ -263,6 +270,7 @@ class Sound {
     this.source = this.context.createBufferSource();
     this.source.buffer = this.buffer;
     this.source.connect(this.gainNode);
+    this.gainNode.gain.setValueAtTime(0.2, sound.currentTime);
     this.gainNode.connect(this.context.destination);
   }
 
@@ -287,7 +295,7 @@ class Sound {
       draw();
     }else {
       this.init();
-      this.source.start(0, sound.currentTime);
+      this.source.start(0);
       this.createAnalyser();
       draw();
     };
@@ -297,7 +305,6 @@ class Sound {
           sound.nextSound();
         }
       }, 2000);
-      console.log('end');
     };
   }
 
@@ -339,6 +346,7 @@ class Sound {
   }
 
    nextSound() {
+    cancelAnimationFrame(idAnimation);
     sound.soundName();
     if(sound.timerId == 'end') {
       sound.musicTimer();
@@ -352,6 +360,27 @@ class Sound {
     }else {
       sound = new Sound(context, buffer.buffer[0]);
       sound.soundIndex = 0;
+      sound[Symbol.for('condition')]();
+    };
+    sound.currentTime = 0;
+    
+  }
+
+  previousSound() {
+    cancelAnimationFrame(idAnimation);
+    sound.soundName();
+    if(sound.timerId == 'end') {
+      sound.musicTimer();
+    };
+    sound.stop();
+    if(buffer.buffer[sound.soundIndex - 1]) {
+      sound = new Sound(context, buffer.buffer[sound.soundIndex - 1]);
+      sound.soundIndex -= 1;
+      sound.soundIndex = buffer.buffer.indexOf(sound.buffer);
+      sound[Symbol.for('condition')]();
+    }else {
+      sound = new Sound(context, buffer.buffer[buffer.buffer.length-1]);
+      sound.soundIndex = buffer.buffer.length - 1;
       sound[Symbol.for('condition')]();
     };
     sound.currentTime = 0;
@@ -389,7 +418,7 @@ class Sound {
 };
 
 let context = new (window.AudioContext || window.webkitAudioContext)();
-let urlsAudio = ['music/Zedd_featJon_Bellion_BeautifulNow.mp3','music/Starset – My Demons.mp3', 'music/Blackbear – Idfc.mp3', 'music/Extreme_Music-Bring_Me_Back_To_Life.mp3', 'music/Alan Walker – Faded.mp3', 'music/08 - Linkin Park - Hybrid Theory - In The End.mp3', 'music/bring-me-the-horizon-throne_.mp3'];
+let urlsAudio = ['music/Zedd_featJon_Bellion_BeautifulNow.mp3','music/Starset – My Demons.mp3', 'music/BMTH – can you feel my heart.mp3', 'music/Extreme_Music-Bring_Me_Back_To_Life.mp3', 'music/Alan Walker – Faded.mp3', 'music/08 - Linkin Park - Hybrid Theory - In The End.mp3', 'music/bring-me-the-horizon-throne_.mp3'];
 
 
   window.buffer = new Buffer(context, urlsAudio);
@@ -443,13 +472,12 @@ playButton.onclick = playSound;
 
 function addEventOnArrElements(arr, event, fn) {
   arr.forEach(el => {
-    console.log(el);
     if(el.node.tagName == 'DIV') el.node.addEventListener(event,() => fn(el));
   });
 };
 
-
-
+buttonNext.addEventListener('click', sound.nextSound);
+buttonPrevious.addEventListener('click', sound.previousSound);
 
 
 
@@ -483,4 +511,9 @@ timeline.addEventListener('mouseup', () => {
   sound.soundName();
 });
 
-
+volume.addEventListener('input', () => {
+  let v = ((volume.value * 100)/ 2.4) - 100/2.4;
+  
+  sound.gainNode.gain.value = -(volume.value);
+  volume.style.background = `-webkit-linear-gradient(left, #222 0%, #222 ${v}%, #fff ${v}%, #fff 100%)`;
+});

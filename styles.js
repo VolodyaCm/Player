@@ -21,26 +21,23 @@ const hoverList = {
   background: 'rgba(34,34,34,0)',
   borderRadius: '10px',
   color: '#222',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  alignContent: 'center',
 };
 
 const hoverEl2 = {
   width: '300%',
   background: 'none',
+  height: '60px',
 };
 
 const hoverEffects = {
-  background: '#473434',
-  cursor: 'pointer',
-  borderRadius: '10px',
-  transition: '0.3s',
+  // background: '#473434',
+  // cursor: 'pointer',
+  // borderRadius: '10px',
+  // transition: '0.3s',
 };
 
 const hoverEl3 = {
-  width: '300%',
+  // width: '300%',
 }
 
 const strSoundStyle = {
