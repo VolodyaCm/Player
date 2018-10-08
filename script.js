@@ -372,7 +372,6 @@ class Sound {
   play(tm) {
     sound.soundName();
     sound.checkMusicInTheList();
-    setSoundOnTimeline();
     if(tm || tm == 0) {
       cancelAnimationFrame(idAnimation);
       // sound.context.suspend();
@@ -381,6 +380,7 @@ class Sound {
       sound.soundIndex = this.soundIndex;
       sound.init();
       sound.createAnalyser();
+      setSoundOnTimeline();
       sound.source.start(0, tm);
       sound.context.resume();
       draw();
@@ -388,6 +388,7 @@ class Sound {
       this.init();
       this.source.start(0);
       this.createAnalyser();
+      setSoundOnTimeline();
       draw();
     };
     
