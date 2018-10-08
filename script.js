@@ -380,7 +380,6 @@ class Sound {
       sound.soundIndex = this.soundIndex;
       sound.init();
       sound.createAnalyser();
-      setSoundOnTimeline();
       sound.source.start(0, tm);
       sound.context.resume();
       draw();
