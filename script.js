@@ -372,6 +372,7 @@ class Sound {
   play(tm) {
     sound.soundName();
     sound.checkMusicInTheList();
+    setSoundOnTimeline();
     if(tm || tm == 0) {
       cancelAnimationFrame(idAnimation);
       // sound.context.suspend();
