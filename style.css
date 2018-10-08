@@ -394,6 +394,22 @@ body {
   position: relative;
   top: 0;
   opacity: 0;
-  box-shadow: 0 20px 10px 1px #151515;
+  /* box-shadow: 0 20px 10px 1px #151515; */
   /* opacity: 0; */
 }
+
+.hoverPlay {
+  cursor: pointer;
+  height: 90px;
+  border-radius: 50%;
+  transition: 0.2s;
+  font-size: 40px;
+  line-height: 90px;
+  width: 90px;
+}
+
+.hoverEl1{
+  height: 90px;
+  border-radius: 50%;
+  background: #473434';
+};

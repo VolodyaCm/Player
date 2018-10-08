@@ -1,3 +1,7 @@
+let idAnimation;
+let idAnimation2;
+
+
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
@@ -21,6 +25,7 @@ const timeline = document.querySelector('.range');
 const blocks = document.querySelectorAll('.blocks');
 const load = document.querySelector('.load');
 
+//Прелоадер
 function moveRightToLeft() {
   let n = 40;
   let t = 500;
@@ -43,13 +48,16 @@ function moveDUD() {
     tId = setTimeout(function() {
       el.style.transition = '0.5s';
       el.style.top = `-45px`;
+      // el.style.boxShadow = '0 100px 50px 1px #151515'
+      el.style.transform = 'rotate(-90deg)';
       setTimeout(function() {
         el.style.transition = '0.2s';
         el.style.top = `35px`;
         el.style.opacity = 0;
+        // el.style.boxShadow = '0 20px 10px 1px #151515';
+        setTimeout(function() {el.style.transform = 'rotate(90deg)';}, 800);
       }, 300); 
     }, t)
-    // n += 90;
     t += 250;
   }
 }
@@ -71,7 +79,6 @@ function startAnimation() {
 function startGlobalAnimation() {
   let i = 0;
   let tId = setTimeout(function tick() {
-    console.log(tId);
     startAnimation();
     if(i >= 5) {
       i = 0;
@@ -87,6 +94,7 @@ function startGlobalAnimation() {
   }, 100);
 };
 
+//Запускаємо прелоадер при завантаженні сторінки 
 window.onload = function() {
   startGlobalAnimation();
 };
@@ -103,6 +111,7 @@ close.addEventListener('click', function() {
   // menu.style.display = 'none';
 });
 
+//Відображення треків в списку
 function loadListMusic() {
   let n = 0;
   for(let s of buffer.urls) {
@@ -139,7 +148,7 @@ function getInterfaceElements(arrNodeElements) {
 
 //Деструктуризація масиву який повертає функція gtInterfaceElements()
 const [parentInterfaseElements, childrenInterfaseElements] = getInterfaceElements(document.querySelectorAll('.el'));
-// const [soundStrElements, childrenSoundStrElements] = getInterfaceElements(document.querySelectorAll('.soundStr'));
+
 //Масив функцій для кожного елементу управління які виконуються при події event
 const functions = [
   [
@@ -211,12 +220,13 @@ const functions = [
 
 ];
 
-//Функція яка привязує обробник функцію з масиву functions 
+//Функція яка генерує 2 події для елемента el і привязує обробник події з масиву functions 
 function setBehavior(el, functions) {
     el.addEventListener('mouseover', functions[0]);
     el.addEventListener('mouseout', functions[1]);
 };
 
+//Функція яка викликає setBehavior для кожного елемента childrenInterfaseElements. 
 function behaviorToElement() {
   let i = 0;
   for(let el of childrenInterfaseElements) {
@@ -226,9 +236,6 @@ function behaviorToElement() {
 };
 
 behaviorToElement();
-
-
-
 
 //Функція встановлення стилів
 function setStyles(styles, obj2) {
@@ -244,32 +251,25 @@ function deleteStyles(styles, obj2) {
   }
 };
 
-let idAnimation;
-let analyserData = {color: '#222',setColor() {return this.color}};
-
 //Візуалізація мелодії. 
 function draw() {
+  //requestAnimationFrame для створення анімації еквалайзера
   idAnimation = requestAnimationFrame(draw);
   var freqByteData = new Uint8Array(sound.analyser.frequencyBinCount);
   sound.analyser.getByteFrequencyData(freqByteData);
-
+  //Очищення canvas перед візуалізацією наступного кадру анімації
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  
-  for (var i = 1; i < freqByteData.length; i += 1){
-      let grd = ctx.createLinearGradient(1500,50,10,1000);
-      grd.addColorStop(0,"#1f4037");
-      grd.addColorStop(1,"#99f2c8");
 
-      ctx.fillStyle = analyserData.setColor();
+  //Цикл для відображення на полотні вертикальних ліній 
+  for (var i = 1; i < freqByteData.length; i += 1){
+      ctx.fillStyle = '#222';
       ctx.fillRect(i -100, canvas.height - freqByteData[i] * 1, 1, canvas.height);
       // ctx.strokeRect(i - 100, canvas.height - freqByteData[i] * 1.5, 2, canvas.height);
   };
 };
 
 
-
-
-
+//Клас Buffer містить методи для завантаження та отримання мелодій  
 class Buffer {
   constructor(context, urls) {  
     this.context = context;
@@ -277,6 +277,7 @@ class Buffer {
     this.buffer = [];
   }
 
+  //Завантаження мелодії використовуючи AJAX  
   loadSound(url, index) {
     let request = new XMLHttpRequest();
     request.open('GET', url, true);
@@ -285,9 +286,6 @@ class Buffer {
     request.onload = function() {
       thisBuffer.context.decodeAudioData(request.response, function(buffer) {
         thisBuffer.buffer[index] = buffer;
-        if(index == thisBuffer.urls.length-1) {
-          thisBuffer.loaded();
-        };
         if(thisBuffer.buffer.indexOf(buffer) == 0) {
           window.sound.buffer = thisBuffer.buffer[0];
           sound.play();
@@ -298,19 +296,15 @@ class Buffer {
     request.send();
     
   };
-
+  
   loadAll() {
     let th = this;
     return new Promise(function(resolve, reject) {
       th.urls.forEach((url, index) => {
-      th.loadSound(url, index);
+        th.loadSound(url, index);
       });
       setTimeout(resolve, 1000);
     });
-  }
-
-  loaded() {
-    // what happens when all the files are loaded
   }
 
   getSoundByIndex(index) {
@@ -327,8 +321,8 @@ class Buffer {
 };
 
 
-class Sound {
 
+class Sound {
   constructor(context, buffer) {
     this.context = context;
     this.buffer = buffer;
@@ -353,8 +347,7 @@ class Sound {
     this.analyser.connect(this.context.destination);
   }
 
-
-
+  //
   checkMusicInTheList() {
     soundStrElements.forEach(el => {
       if(el.node.tagName == 'DIV') {
@@ -367,7 +360,6 @@ class Sound {
         if(el2.node.textContent == sound.name.slice(6)) {
           el2.node.parentNode.style.background = 'silver';
         };
-        console.log()
         if(el.id.slice(5) == sound.soundIndex) {
           el.state = 'plaing';
         }
@@ -376,8 +368,8 @@ class Sound {
     });
   }
   
+  //Метод для відтворення мелодії. 
   play(tm) {
-    
     sound.soundName();
     sound.checkMusicInTheList();
     if(tm || tm == 0) {
@@ -397,6 +389,8 @@ class Sound {
       this.createAnalyser();
       draw();
     };
+    
+    //Виклик метода sound.nextSound() після завершення відтворення поточної мелодії 
     sound.source.onended = function() {
       setTimeout(function() {
         if(sound.timerId == 'end') {
@@ -406,6 +400,7 @@ class Sound {
     };
   }
 
+  //Відтворює мелодію за індексом id
   playSoundForIndex(id) {
     sound.currentTime = 0;
     if(buffer.buffer[+id]) {
@@ -430,11 +425,15 @@ class Sound {
     sound.checkMusicInTheList();
   }
 
+  //Зупиняє відтворення мелодії
   stop() {
+    cancelAnimationFrame(idAnimation);
+    cancelAnimationFrame(idAnimation2);
     this.gainNode.gain.exponentialRampToValueAtTime(0.001, this.context.currentTime + 0.5);
     this.source.stop(this.context.currentTime + 0.5);
   }
 
+  //Приватний метод для перевірки стану мелодії. Використовується в nextSound() та подібних методах для встановлення стану поточної мелодії використовуючи стан попередньої.
   [Symbol.for('condition')]() {
     if(sound.context.state == 'running') {
       sound.play();
@@ -445,7 +444,8 @@ class Sound {
     }
   }
 
-   nextSound() {
+  //Відтворює наступну мелодію 
+  nextSound() {
     cancelAnimationFrame(idAnimation);
     sound.soundName();
     if(sound.timerId == 'end') {
@@ -466,6 +466,7 @@ class Sound {
     
   }
 
+  //Відтворює попередню мелодію
   previousSound() {
     cancelAnimationFrame(idAnimation);
     sound.soundName();
@@ -487,6 +488,7 @@ class Sound {
     
   }
 
+  //Таймер який записує поточний час відтворення у властивість sound.currentTime
   musicTimer() {
     if(sound.context.state == 'running') {
         sound.timerId = setTimeout(function run(){
@@ -494,7 +496,6 @@ class Sound {
           sound.currentTime += 1;
           sound.timerId = setTimeout(run, 1000);
         }else if(sound.currentTime >= sound.buffer.duration) {
-          console.log('_---------------------sd');
           clearTimeout(sound.timerId);
           sound.timerId = 'end';
         }else{
@@ -504,12 +505,12 @@ class Sound {
         };
       }, 1000); 
     }else {
-      console.log('---------------sdsd');
       clearTimeout(sound.timerId);
       sound.timerId = 0;
     }
   }
 
+  //Визначає ім'я мелодії опираючись на її розташуванні. Записує в sound.name та inputName
   soundName() {
     sound.name = urlsAudio[sound.soundIndex];
     inputName.innerHTML = sound.name.slice(6);
@@ -538,7 +539,6 @@ let urlsAudio = ['music/Zedd_featJon_Bellion_BeautifulNow.mp3','music/Starset �
 function soundStrOver(el) {
   el.node.style.cursor = 'pointer';
   if(!el.state) {
-    console.log(el);
     el.node.style.background = '#d3d3d3';
   }
 };
@@ -547,9 +547,8 @@ function soundStrOut(el) {
   if(!el.state) {
     el.node.style.background = '#ebebeb';
   }
-}
+};
 
-let idAnimation2;
 function setSoundOnTimeline() {
   idAnimation2 = requestAnimationFrame(setSoundOnTimeline);
   let duration = sound.buffer.duration;
@@ -562,9 +561,9 @@ function setSoundOnTimeline() {
 
 function playSound() {
   if(sound.context.state === 'running') {
+    cancelAnimationFrame(idAnimation);
     cancelAnimationFrame(idAnimation2);
     sound.context.suspend();
-    cancelAnimationFrame(idAnimation);
     playButton.children[0].src = 'img/play.svg';
   } else if(sound.context.state === 'suspended') {
     playButton.children[0].src = 'img/pause.svg';
@@ -592,25 +591,18 @@ function whatSoundPlay(element) {
 
 playButton.onclick = playSound;
 
-function addEventOnArrElements(arr, event, fn) {
+function addEventOnArrElements(arr, event, fn, ...args) {
   arr.forEach(el => {
-    el.node.addEventListener(event,() => fn(el));
+    el.node.addEventListener(event,() => fn(el, args));
   });
 };
 
 buttonNext.addEventListener('click', sound.nextSound);
 buttonPrevious.addEventListener('click', sound.previousSound);
 
-
-
-// addEventOnArrElements(childrenSoundStrElements, 'onclick', playSound);
-
-
-
 function progress(v) {
   timeline.style.background = `-webkit-linear-gradient(left, #222 0%, #222 ${v}%, #fff ${v}%, #fff 100%)`;
 };
-
 
 timeline.addEventListener('input', () => {
   if(sound.timerId == 'end') {
@@ -620,7 +612,6 @@ timeline.addEventListener('input', () => {
   let t = (timeline.value * sound.buffer.duration)/100;
   progress(timeline.value);
   if(sound.context.state === 'running') sound.play(t);
-  // console.log(sound.context.state);
   sound.soundName();
 });
 timeline.addEventListener('mouseup', () => {
@@ -635,7 +626,6 @@ timeline.addEventListener('mouseup', () => {
 
 volume.addEventListener('input', () => {
   let v = ((volume.value * 100)/ 2.4) - 100/2.4;
-  
   sound.gainNode.gain.value = -(volume.value);
   volume.style.background = `-webkit-linear-gradient(left, #222 0%, #222 ${v}%, #fff ${v}%, #fff 100%)`;
 });
