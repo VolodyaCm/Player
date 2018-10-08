@@ -412,6 +412,7 @@ class Sound {
       this.init();
       this.source.start(0);
       this.createAnalyser();
+      setSoundOnTimeline();
       draw();
       sound.source.onended = function() {
         setTimeout(function() {
