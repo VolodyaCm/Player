@@ -30,14 +30,9 @@ const hoverEl2 = {
 };
 
 const hoverEffects = {
-  // background: '#473434',
-  // cursor: 'pointer',
-  // borderRadius: '10px',
-  // transition: '0.3s',
 };
 
 const hoverEl3 = {
-  // width: '300%',
 }
 
 const strSoundStyle = {

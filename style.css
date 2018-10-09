@@ -395,9 +395,167 @@ body {
   top: 0;
   opacity: 0;
   /* box-shadow: 0 20px 10px 1px #151515; */
-  /* opacity: 0; */
 }
 
+.block1 {
+  animation-duration: 3s;
+  animation-name: animationB1;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+}
+
+.block2 {
+  animation-duration: 3s;
+  animation-name: animationB2;
+  animation-delay: 0.6s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+}
+
+.block3 {
+  animation-duration: 3s;
+  animation-name: animationB3;
+  animation-delay: 1.2s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+}
+
+.block4 {
+  animation-duration: 3s;
+  animation-name: animationB4;
+  animation-delay: 1.8s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+}
+
+@keyframes animationB1 {
+  0%, 10% {
+    opacity: 0;
+    top: 0;
+    transform: rotate(0);
+  }
+  10%, 20% {
+    opacity: 1;
+    top: 0;
+    transform: rotate(0);
+  }
+  20%, 35% {
+    opacity: 1;
+    top: 0;
+    transform: rotate(0);
+  }
+  35%, 50% {
+    opacity: 1;
+    top: -100px;
+    transform: rotate(-180deg);
+  }
+  50%, 65% {
+    transform: rotate(-360deg);
+    opacity: 1;
+    top: 0px;
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(360deg);
+  }
+  
+}
+
+@keyframes animationB2 {
+  0%, 10% {
+    opacity: 0;
+    top: 0;
+    transform: rotate(0);
+  }
+  10%, 20% {
+    opacity: 1;
+    top: 0;
+    transform: rotate(0);
+  }
+  20%, 35% {
+    opacity: 1;
+    top: 0;
+    transform: rotate(0);
+  }
+  35%, 50% {
+    opacity: 1;
+    top: -100px;
+    transform: rotate(-180deg);
+  }
+  50%, 65% {
+    transform: rotate(-360deg);
+    opacity: 1;
+    top: 0px;
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes animationB3 {
+  0%, 10% {
+    opacity: 0;
+    top: 0;
+    transform: rotate(0);
+  }
+  10%, 20% {
+    opacity: 1;
+    top: 0;
+    transform: rotate(0);
+  }
+  20%, 35% {
+    opacity: 1;
+    top: 0;
+    transform: rotate(0);
+  }
+  35%, 50% {
+    opacity: 1;
+    top: -100px;
+    transform: rotate(-180deg);
+  }
+  50%, 65% {
+    transform: rotate(-360deg);
+    opacity: 1;
+    top: 0px;
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes animationB4 {
+  0%, 10% {
+    opacity: 0;
+    top: 0;
+    transform: rotate(0);
+  }
+  10%, 20% {
+    opacity: 1;
+    top: 0;
+    transform: rotate(0);
+  }
+  20%, 35% {
+    opacity: 1;
+    top: 0;
+    transform: rotate(0);
+  }
+  35%, 50% {
+    opacity: 1;
+    top: -100px;
+    transform: rotate(-180deg);
+  }
+  50%, 65% {
+    transform: rotate(-360deg);
+    opacity: 1;
+    top: 0px;
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(360deg);
+  }
+}
 .hoverPlay {
   cursor: pointer;
   height: 90px;

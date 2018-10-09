@@ -25,74 +25,82 @@ const timeline = document.querySelector('.range');
 const blocks = document.querySelectorAll('.blocks');
 const load = document.querySelector('.load');
 
+
+
+setTimeout(function() {
+  load.style.opacity = 0;
+  setTimeout(function() {
+    load.style.display = 'none';
+  }, 1000); 
+}, 12000);
 //Прелоадер
-function moveRightToLeft() {
-  let n = 40;
-  let t = 500;
-  let tId;
-  for(let el of blocks) {
-      tId = setTimeout(function () {
-      el.style.transition = '0.7s';
-      el.style.right = `- ${n}px`;
-      el.style.opacity = 1;
-    },t);
-    n += 20;
-    t += 250;
-  }
-};
+// function moveRightToLeft() {
+//   let n = 40;
+//   let t = 500;
+//   let tId;
+//   for(let el of blocks) {
+//       tId = setTimeout(function () {
+//       el.style.transition = '0.7s';
+//       el.style.right = `- ${n}px`;
+//       el.style.opacity = 1;
+//     },t);
+//     n += 20;
+//     t += 250;
+//   }
+// };
 
-function moveDUD() {
-  let n = 380;
-  let t = 200;
-  for(let el of blocks) {
-    tId = setTimeout(function() {
-      el.style.transition = '0.5s';
-      el.style.top = `-45px`;
-      // el.style.boxShadow = '0 100px 50px 1px #151515'
-      el.style.transform = 'rotate(-90deg)';
-      setTimeout(function() {
-        el.style.transition = '0.2s';
-        el.style.top = `35px`;
-        el.style.opacity = 0;
-        // el.style.boxShadow = '0 20px 10px 1px #151515';
-        setTimeout(function() {el.style.transform = 'rotate(90deg)';}, 800);
-      }, 300); 
-    }, t)
-    t += 250;
-  }
-}
+// function moveDUD() {
+//   let n = 380;
+//   let t = 200;
+//   for(let el of blocks) {
+//     tId = setTimeout(function() {
+//       el.style.transition = '0.5s';
+//       el.style.top = `-45px`;
+//       // el.style.boxShadow = '0 100px 50px 1px #151515'
+//       el.style.transform = 'rotate(-90deg)';
+//       setTimeout(function() {
+//         el.style.transition = '0.2s';
+//         el.style.top = `35px`;
+//         el.style.opacity = 0;
+//         // el.style.boxShadow = '0 20px 10px 1px #151515';
+//         setTimeout(function() {el.style.transform = 'rotate(90deg)';}, 800);
+//       }, 300); 
+//     }, t)
+//     t += 250;
+//   }
+// }
 
-function startAnimation() {
-  moveRightToLeft();
-  setTimeout(function() {
-    moveDUD();
-  }, 1500);
-  setTimeout(function() {
-    for(let el of blocks) {
-      el.style.top = 0;
-      el.style.opacity = 0;
-      // el.style.right = 0;
-    }
-  }, 3100); 
-}
+// function startAnimation() {
+//   moveRightToLeft();
+//   setTimeout(function() {
+//     moveDUD();
+//   }, 1500);
+//   setTimeout(function() {
+//     for(let el of blocks) {
+//       el.style.top = 0;
+//       el.style.opacity = 0;
+//       // el.style.right = 0;
+//     }
+//   }, 3100); 
+// }
 
-function startGlobalAnimation() {
-  let i = 0;
-  let tId = setTimeout(function tick() {
-    startAnimation();
-    if(i >= 5) {
-      i = 0;
-      load.style.opacity = 0;
-      clearTimeout(tId);
-      setTimeout(function() {
-        load.style.display = 'none';
-      }, 500);
-      return;
-    };
-    i += 1;
-    tId = setTimeout(tick, 3000);
-  }, 100);
-};
+// function startGlobalAnimation() {
+//   let i = 0;
+//   let tId = setTimeout(function tick() {
+//     startAnimation();
+//     if(i >= 5) {
+//       i = 0;
+//       load.style.opacity = 0;
+//       clearTimeout(tId);
+//       setTimeout(function() {
+//         load.style.display = 'none';
+//       }, 500);
+//       return;
+//     };
+//     i += 1;
+//     tId = setTimeout(tick, 3000);
+//   }, 100);
+// };
 
 //Запускаємо прелоадер при завантаженні сторінки 
 window.onload = function() {
@@ -377,6 +385,7 @@ class Sound {
       // sound.context.suspend();
       sound.stop();
       sound = new Sound(context, buffer.buffer[buffer.buffer.indexOf(sound.buffer)]);
+      sound.gainNode.gain.value = this.sound.gainNode.gain.value;
       sound.soundIndex = this.soundIndex;
       sound.init();
       sound.createAnalyser();
