@@ -454,7 +454,6 @@ class Sound {
     sound.name = urlsAudio[sound.soundIndex];
     inputName.innerHTML = sound.name.slice(6);
   }
-
 };
 
 let context = new (window.AudioContext || window.webkitAudioContext)();
