@@ -386,14 +386,15 @@ body {
   transition: 1s;
 }
 
+
 .block1, .block2, .block3, .block4 {
   width: 40px;
   height: 40px;
-  background: #fff;
+  background: rgb(236, 236, 236);
   margin: 2.5px;
   position: relative;
   top: 0;
-  opacity: 0;
+  opacity: 1;
   /* box-shadow: 0 20px 10px 1px #151515; */
 }
 
@@ -433,30 +434,35 @@ body {
     opacity: 0;
     top: 0;
     transform: rotate(0);
+    border-radius: 50%;
   }
   10%, 20% {
     opacity: 1;
     top: 0;
     transform: rotate(0);
+    border-radius: 50%;
   }
   20%, 35% {
     opacity: 1;
     top: 0;
     transform: rotate(0);
+    border-radius: 50%;
   }
   35%, 50% {
     opacity: 1;
     top: -100px;
     transform: rotate(-180deg);
+    border-radius: 5px;
   }
   50%, 65% {
     transform: rotate(-360deg);
     opacity: 1;
     top: 0px;
   }
-  100% {
+  90%, 100% {
     opacity: 1;
     transform: rotate(360deg);
+    border-radius: 50%;
   }
   
 }
@@ -466,30 +472,35 @@ body {
     opacity: 0;
     top: 0;
     transform: rotate(0);
+    border-radius: 50%;
   }
   10%, 20% {
     opacity: 1;
     top: 0;
     transform: rotate(0);
+    border-radius: 50%;
   }
   20%, 35% {
     opacity: 1;
     top: 0;
     transform: rotate(0);
+    border-radius: 50%;
   }
   35%, 50% {
     opacity: 1;
     top: -100px;
     transform: rotate(-180deg);
+    border-radius: 5px;
   }
   50%, 65% {
     transform: rotate(-360deg);
     opacity: 1;
     top: 0px;
   }
-  100% {
+  90%, 100% {
     opacity: 1;
     transform: rotate(360deg);
+    border-radius: 50%;
   }
 }
 
@@ -498,30 +509,36 @@ body {
     opacity: 0;
     top: 0;
     transform: rotate(0);
+    border-radius: 50%;
   }
   10%, 20% {
     opacity: 1;
     top: 0;
     transform: rotate(0);
+    border-radius: 50%;
   }
   20%, 35% {
     opacity: 1;
     top: 0;
     transform: rotate(0);
+    border-radius: 50%;
   }
   35%, 50% {
     opacity: 1;
     top: -100px;
     transform: rotate(-180deg);
+    border-radius: 5px;
   }
   50%, 65% {
     transform: rotate(-360deg);
     opacity: 1;
     top: 0px;
+    
   }
-  100% {
+  90%, 100% {
     opacity: 1;
     transform: rotate(360deg);
+    border-radius: 50%;
   }
 }
 
@@ -530,30 +547,35 @@ body {
     opacity: 0;
     top: 0;
     transform: rotate(0);
+    border-radius: 50%;
   }
   10%, 20% {
     opacity: 1;
     top: 0;
     transform: rotate(0);
+    border-radius: 50%;
   }
   20%, 35% {
     opacity: 1;
     top: 0;
     transform: rotate(0);
+    border-radius: 50%;
   }
   35%, 50% {
     opacity: 1;
     top: -100px;
     transform: rotate(-180deg);
+    border-radius: 5px;
   }
   50%, 65% {
     transform: rotate(-360deg);
     opacity: 1;
     top: 0px;
   }
-  100% {
+  90%, 100% {
     opacity: 1;
     transform: rotate(360deg);
+    border-radius: 50%;
   }
 }
 .hoverPlay {
