@@ -431,7 +431,7 @@ body {
 
 @keyframes animationB1 {
   0%, 10% {
-    opacity: 0;
+    opacity: 1;
     top: 0;
     transform: rotate(0);
     border-radius: 50%;
@@ -469,7 +469,7 @@ body {
 
 @keyframes animationB2 {
   0%, 10% {
-    opacity: 0;
+    opacity: 1;
     top: 0;
     transform: rotate(0);
     border-radius: 50%;
@@ -506,7 +506,7 @@ body {
 
 @keyframes animationB3 {
   0%, 10% {
-    opacity: 0;
+    opacity: 1;
     top: 0;
     transform: rotate(0);
     border-radius: 50%;
@@ -544,7 +544,7 @@ body {
 
 @keyframes animationB4 {
   0%, 10% {
-    opacity: 0;
+    opacity: 1;
     top: 0;
     transform: rotate(0);
     border-radius: 50%;
