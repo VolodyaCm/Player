@@ -27,12 +27,12 @@ const load = document.querySelector('.load');
 
 
 //Прелоадер
-setTimeout(function() {
-  load.style.opacity = 0;
-  setTimeout(function() {
-    load.style.display = 'none';
-  }, 1000); 
-}, 15000);
+function stopLoading() {
+    load.style.opacity = 0;
+    setTimeout(function() {
+      load.style.display = 'none';
+    }, 1000); 
+};
 
 
 openSoundList.addEventListener('click', function() {
@@ -226,7 +226,8 @@ class Buffer {
           window.sound.buffer = thisBuffer.buffer[0];
           sound.play();
           sound.context.suspend();
-        }
+          stopLoading();
+        };
       });
     };
     request.send();
@@ -470,6 +471,7 @@ let urlsAudio = ['music/Zedd_featJon_Bellion_BeautifulNow.mp3','music/Starset �
     addEventOnArrElements(soundStrElements, 'click', whatSoundPlay);
     addEventOnArrElements(soundStrElements, 'mouseover', soundStrOver);
     addEventOnArrElements(soundStrElements, 'mouseout', soundStrOut);
+    
   });
   window.sound = new Sound(context);
   
